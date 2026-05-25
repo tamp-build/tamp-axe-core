@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+    <RootNamespace>Tamp.AxeCore</RootNamespace>
+    <AssemblyName>Tamp.AxeCore</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Package">
+    <PackageId>Tamp.AxeCore</PackageId>
+    <Description>Tamp CommandPlan wrappers for standalone web accessibility scanning — @axe-core/cli for the scan itself and axe-sarif-converter for the JSON→SARIF emission that feeds the Tamp security pipeline. Smart binary resolution: project-local node_modules/.bin → pnpm exec → npm exec → global PATH → pre-flight skip via AxeCoreBinaryResolver.IsAvailable. For in-browser-test a11y assertions, prefer @axe-core/playwright via Tamp.Npm + Tamp.Playwright instead — this package is for standalone URL scans against deployed environments.</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(TampCorePath)" Condition="'$(TampCoreMode)' == 'project'" />
+    <PackageReference Include="Tamp.Core" Condition="'$(TampCoreMode)' == 'package'" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
+  </ItemGroup>
+
+</Project>
