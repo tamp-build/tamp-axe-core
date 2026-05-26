@@ -79,6 +79,10 @@ Target SecurityScanAxeCore => _ => _
             .SetOutputFile(sarif));
         ProcessRunner.Execute(sarifPlan);
 
+        // 0.1.1+ — stamp `properties.tags: ["accessibility"]` on every result so the
+        // downstream SARIF consumer can route by category without scanner-name heuristics.
+        AxeCoreSarif.AnnotateResults(sarif, "accessibility");
+
         // sarif is now ready for /ingest/findings (tamp-ingest-v1).
     });
 ```
@@ -113,6 +117,23 @@ Common WCAG tags: `wcag2a`, `wcag2aa`, `wcag21aa`, `wcag22aa`, `best-practice`. 
 | `SetOutputFile(sarif)` | positional 2 | yes |
 
 Pure conversion — no flags beyond the positional input/output. The output SARIF 2.1.0 plugs straight into the [tamp-ingest-v1](https://github.com/tamp-build/tamp-findings#tamp-ingest-v1) `/ingest/findings` contract.
+
+## Source-side category tagging (0.1.1+)
+
+`@axe-core/cli` + `axe-sarif-converter` produce SARIF 2.1.0 but don't stamp a category property on each result. Downstream sinks consuming SARIF from multiple scanners end up doing scanner-name string-matching to route findings into severity / sub-category buckets. `AxeCoreSarif.AnnotateResults` injects `properties.tags` on every result after conversion so consumers can route by tag instead — matches what Trivy emits natively.
+
+```csharp
+AxeCoreSarif.AnnotateResults(sarifPath, "accessibility");
+// every runs[*].results[*].properties.tags now includes "accessibility"
+```
+
+- **Idempotent.** Re-running with the same tag is a no-op; existing tags preserved; case-sensitive dedup per SARIF spec.
+- **Preserves other properties** untouched (severity, custom fields, etc.).
+- **Defensive against malformed input** — if `properties.tags` exists but isn't a JSON array, the annotator replaces it with a fresh array rather than throwing.
+- **No new dependency surface** — uses `System.Text.Json.Nodes.JsonNode` from the BCL.
+- Throws `ArgumentNullException` / `FileNotFoundException` / `InvalidDataException` on bad input.
+
+Typical tags: `"accessibility"` (matches the `tamp-ingest-v1` `SubCategory` vocabulary), `"wcag2aa"`, `"axe-core"` (scanner name), or domain-specific labels you want downstream sinks to route by.
 
 ## Binary resolution
 
