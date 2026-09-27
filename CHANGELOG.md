@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 - **`AxeCoreSarif.AnnotateResults(sarifPath, params string[] tags)`** — post-process the SARIF file produced by `AxeCore.ConvertToSarif` to inject `properties.tags` entries on every result. Source-side tagging path that lets downstream SARIF consumers (`tamp.findings` `/ingest/findings`, DefectDojo, etc.) route by category without filename / scanner-name heuristics. Idempotent; preserves existing tags; case-sensitive dedup per SARIF 2.1.0 spec. No new dependency surface (uses `System.Text.Json.Nodes.JsonNode` from the BCL).
 - 17 new tests for the annotator: happy path, multi-tag append, preserve-and-append on existing properties, idempotency, multi-run walk, defensive replacement for misshaped `tags` field, no-op on empty input, argument/file error paths.
+- Package now ships XML documentation files (`.xml`) alongside the assembly, so consumers get IntelliSense and API docs. (Mirrors [tamp-build/tamp#3](https://github.com/tamp-build/tamp/pull/50).)
 
 ### Why
 
