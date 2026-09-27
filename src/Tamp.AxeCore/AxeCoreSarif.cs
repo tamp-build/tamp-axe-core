@@ -5,7 +5,7 @@ namespace Tamp.AxeCore;
 
 /// <summary>
 /// Post-processing helpers for SARIF files produced by the axe-core toolchain
-/// (<see cref="AxeCore.Scan"/> → <see cref="AxeCore.ConvertToSarif"/>).
+/// (<c>AxeCore.Scan</c> → <c>AxeCore.ConvertToSarif</c>).
 /// </summary>
 /// <remarks>
 /// <para>
@@ -41,7 +41,7 @@ public static class AxeCoreSarif
     /// deduplicating (case-sensitive per SARIF spec). Writes the result back to
     /// the same path. Empty tag list is a no-op (file isn't touched).
     /// </summary>
-    /// <param name="sarifPath">Path to a SARIF 2.1.0 JSON file produced by <see cref="AxeCore.ConvertToSarif"/>.</param>
+    /// <param name="sarifPath">Path to a SARIF 2.1.0 JSON file produced by <c>AxeCore.ConvertToSarif</c>.</param>
     /// <param name="tags">Tag values to inject. Common values: <c>"accessibility"</c>, <c>"wcag2aa"</c>, etc.</param>
     /// <exception cref="ArgumentNullException"><paramref name="sarifPath"/> or <paramref name="tags"/> is null.</exception>
     /// <exception cref="FileNotFoundException"><paramref name="sarifPath"/> does not exist.</exception>
