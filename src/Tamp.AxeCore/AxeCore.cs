@@ -2,8 +2,8 @@ namespace Tamp.AxeCore;
 
 /// <summary>
 /// Tamp wrappers for standalone web accessibility scanning. Two verbs cover the canonical
-/// flow: <see cref="Scan"/> drives <c>@axe-core/cli</c> against a deployed URL to produce
-/// raw axe JSON; <see cref="ConvertToSarif"/> drives <c>axe-sarif-converter</c> to convert
+/// flow: <c>Scan</c> drives <c>@axe-core/cli</c> against a deployed URL to produce
+/// raw axe JSON; <c>ConvertToSarif</c> drives <c>axe-sarif-converter</c> to convert
 /// that JSON to SARIF 2.1.0 for the Tamp security pipeline.
 /// </summary>
 /// <remarks>
